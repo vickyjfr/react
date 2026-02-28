@@ -1,0 +1,29 @@
+{
+  "name": "react",
+  "version": "1.0.0",
+  "private": true,
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "react-native start"
+  },
+  "dependencies": {
+    "package": "^1.0.1",
+    "react": "19.0.0",
+    "react-native": "0.78.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.25.0",
+    "@babel/runtime": "^7.25.0",
+    "@react-native-community/cli": "15.0.1",
+    "@react-native-community/cli-platform-ios": "3.0.0",
+    "@react-native/babel-preset": "0.78.3",
+    "@react-native/metro-config": "0.78.3",
+    "metro": "0.81.3",
+    "metro-config": "0.81.3",
+    "metro-core": "0.81.3",
+    "metro-react-native-babel-preset": "0.78.3",
+    "metro-resolver": "0.81.3",
+    "metro-runtime": "0.81.3"
+  }
+}
