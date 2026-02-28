@@ -1,0 +1,53 @@
+# 使用绝对路径配置 React Native
+react_native_project_root = '/Users/hualai/test/HybridRNApp/react'
+node_modules_path = File.join(react_native_project_root, 'node_modules')
+react_native_path = File.join(node_modules_path, 'react-native')
+
+# 设置环境变量
+ENV['REACT_NATIVE_PATH'] = react_native_path
+
+# 加载 React Native 脚本
+require File.join(react_native_path, 'scripts/react_native_pods')
+
+platform :ios, '15.1'
+
+# 准备 React Native 项目
+prepare_react_native_project!
+
+# 支持动态链接框架（可选）
+linkage = ENV['USE_FRAMEWORKS']
+if linkage != nil
+  Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
+  use_frameworks! :linkage => linkage.to_sym
+end
+
+target 'HybridRNApp' do
+  # 使用 React Native 0.78.3 的标准配置
+  # path 必须是相对于 Podfile 的相对路径
+  use_react_native!(
+    :path => '../../react/node_modules/react-native',
+    :app_path => '../../react',
+    :hermes_enabled => true
+  )
+  
+  # 自动链接原生模块
+  # 使用包装脚本来修复 iOS 项目路径
+  config_command = ['node', File.join(__dir__, 'rn-config-wrapper.js')]
+  use_native_modules!(config_command)
+end
+
+post_install do |installer|
+  # React Native 0.78.3 标准 post_install 配置
+  react_native_post_install(
+    installer,
+    '../../react/node_modules/react-native',
+    :mac_catalyst_enabled => false
+  )
+  
+  # 确保所有 Pods 使用正确的部署目标
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.1'
+    end
+  end
+end
